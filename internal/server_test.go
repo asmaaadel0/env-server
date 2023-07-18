@@ -12,7 +12,7 @@ func TestHandleEnv(t *testing.T) {
 		request, _ := http.NewRequest(http.MethodGet, "/env", nil)
 		response := httptest.NewRecorder()
 
-		handler := http.HandlerFunc(HandleEnv)
+		handler := http.HandlerFunc(handleEnv)
 
 		handler.ServeHTTP(response, request)
 
@@ -32,7 +32,7 @@ func TestHandleEnvKey(t *testing.T) {
 		request, _ := http.NewRequest("GET", "/env/"+key, nil)
 
 		response := httptest.NewRecorder()
-		handler := http.HandlerFunc(HandleEnvKey)
+		handler := http.HandlerFunc(handleEnvKey)
 
 		handler.ServeHTTP(response, request)
 
@@ -55,7 +55,7 @@ func TestHandleEnvKey(t *testing.T) {
 		}
 
 		respond := httptest.NewRecorder()
-		handler := http.HandlerFunc(HandleEnvKey)
+		handler := http.HandlerFunc(handleEnvKey)
 
 		handler.ServeHTTP(respond, request)
 
