@@ -15,7 +15,7 @@ func main() {
 
 	app, err := internal.NewApp(port)
 	if err != nil {
-		log.Fatalf("Error creating App:%p", internal.ErrorOutOfRange)
+		log.Fatalf("Error creating App:%s", internal.ErrorOutOfRange)
 	}
 
 	app.Run()
