@@ -22,17 +22,25 @@ func NewApp(port int) (*App, error) {
 }
 
 func (app *App) Run() {
-	app.HandleRequests()
 
-	http.HandleFunc("/env", handleEnv)
-	http.HandleFunc("/env/", handleEnvKey)
+	http.HandleFunc("/env", handleRequests)
+	http.HandleFunc("/env/", handleRequests)
 
-	fmt.Println("Server started on port 8080")
-	http.ListenAndServe(":8080", nil)
+	portListner := fmt.Sprintf(":%d", app.port)
+	fmt.Println("Server started on port", portListner)
+	http.ListenAndServe(portListner, nil)
 }
 
-func (app *App) HandleRequests() {
+func handleRequests(w http.ResponseWriter, r *http.Request) {
 
+	key := strings.TrimPrefix(r.URL.Path, "/env")
+
+	if key == "" {
+		handleEnv(w, r)
+	} else {
+		handleEnvKey(w, r)
+
+	}
 }
 
 func handleEnv(w http.ResponseWriter, r *http.Request) {

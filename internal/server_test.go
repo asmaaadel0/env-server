@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -67,5 +68,24 @@ func TestHandleEnvKey(t *testing.T) {
 		if respond.Body.String() != want {
 			t.Errorf("expected body %v, but got %v", want, respond.Body.String())
 		}
+	})
+}
+
+func TestNewApp(t *testing.T) {
+	t.Run("fail to create app", func(t *testing.T) {
+		port := 1
+		_, err := NewApp(port)
+		if errors.Is(err, ErrorOutOfRange) {
+			t.Errorf("expected error in creating app")
+		}
+
+	})
+	t.Run("create app sucessfully", func(t *testing.T) {
+		port := 8080
+		_, err := NewApp(port)
+		if err != nil {
+			t.Errorf("expected creating app")
+		}
+
 	})
 }
