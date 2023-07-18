@@ -9,6 +9,10 @@ import (
 
 func handleRequests(w http.ResponseWriter, r *http.Request) {
 
+	if r.Method != http.MethodGet {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
 	key := strings.TrimPrefix(r.URL.Path, "/env")
 
 	if key == "" {

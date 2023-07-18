@@ -23,6 +23,22 @@ func TestHandleEnv(t *testing.T) {
 }
 
 func TestHandleEnvKey(t *testing.T) {
+	t.Run("Get empty key", func(t *testing.T) {
+		request, err := http.NewRequest("GET", "/env/", nil)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		respond := httptest.NewRecorder()
+		handler := http.HandlerFunc(handleEnvKey)
+
+		handler.ServeHTTP(respond, request)
+
+		if respond.Code != http.StatusOK {
+			t.Errorf("expected status %v, but got %v", http.StatusOK, respond.Code)
+		}
+	})
+
 	t.Run("Get existing key", func(t *testing.T) {
 		key := "SOME_VARIABLE"
 		value := "some value"
@@ -66,6 +82,21 @@ func TestHandleEnvKey(t *testing.T) {
 		want := "Environment variable '" + key + "' not found"
 		if respond.Body.String() != want {
 			t.Errorf("expected body %v, but got %v", want, respond.Body.String())
+		}
+	})
+}
+
+func TestNotFound(t *testing.T) {
+	t.Run("Run wrong path", func(t *testing.T) {
+		request, _ := http.NewRequest(http.MethodGet, "/notFound", nil)
+		response := httptest.NewRecorder()
+
+		handler := http.HandlerFunc(handleEnv)
+
+		handler.ServeHTTP(response, request)
+
+		if response.Code != http.StatusOK {
+			t.Errorf("expected status %v, but got %v", http.StatusOK, response.Code)
 		}
 	})
 }
