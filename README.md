@@ -53,6 +53,13 @@ $ cd bin
 
 ## How to use Docker
 
+- To start server using docker
+-
+
+```sh
+docker-compose up -d
+```
+
 ## How to test
 
 - Run the tests by running:
