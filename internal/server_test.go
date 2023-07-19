@@ -12,7 +12,7 @@ func TestHandleEnv(t *testing.T) {
 		request, _ := http.NewRequest(http.MethodGet, "/env", nil)
 		response := httptest.NewRecorder()
 
-		handler := http.HandlerFunc(handleEnv)
+		handler := http.HandlerFunc(handleRequests)
 
 		handler.ServeHTTP(response, request)
 
@@ -30,7 +30,7 @@ func TestHandleEnvKey(t *testing.T) {
 		}
 
 		respond := httptest.NewRecorder()
-		handler := http.HandlerFunc(handleEnvKey)
+		handler := http.HandlerFunc(handleRequests)
 
 		handler.ServeHTTP(respond, request)
 
@@ -48,7 +48,7 @@ func TestHandleEnvKey(t *testing.T) {
 		request, _ := http.NewRequest("GET", "/env/"+key, nil)
 
 		response := httptest.NewRecorder()
-		handler := http.HandlerFunc(handleEnvKey)
+		handler := http.HandlerFunc(handleRequests)
 
 		handler.ServeHTTP(response, request)
 
@@ -71,7 +71,7 @@ func TestHandleEnvKey(t *testing.T) {
 		}
 
 		respond := httptest.NewRecorder()
-		handler := http.HandlerFunc(handleEnvKey)
+		handler := http.HandlerFunc(handleRequests)
 
 		handler.ServeHTTP(respond, request)
 
@@ -86,12 +86,26 @@ func TestHandleEnvKey(t *testing.T) {
 	})
 }
 
+func TestHandleRequests(t *testing.T) {
+	t.Run("Post request", func(t *testing.T) {
+		request, err := http.NewRequest(http.MethodPost, "/env", nil)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		respond := httptest.NewRecorder()
+		handler := http.HandlerFunc(handleRequests)
+
+		handler.ServeHTTP(respond, request)
+	})
+}
+
 func TestNotFound(t *testing.T) {
 	t.Run("Run wrong path", func(t *testing.T) {
 		request, _ := http.NewRequest(http.MethodGet, "/notFound", nil)
 		response := httptest.NewRecorder()
 
-		handler := http.HandlerFunc(handleEnv)
+		handler := http.HandlerFunc(handleRequests)
 
 		handler.ServeHTTP(response, request)
 

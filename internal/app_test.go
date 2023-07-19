@@ -7,9 +7,9 @@ import (
 
 func TestNewApp(t *testing.T) {
 	t.Run("fail to create app", func(t *testing.T) {
-		port := 1
+		port := 0
 		_, err := NewApp(port)
-		if errors.Is(err, ErrorOutOfRange) {
+		if !errors.Is(err, ErrorOutOfRange) {
 			t.Errorf("expected error in creating app")
 		}
 
