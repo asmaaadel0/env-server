@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -34,14 +35,15 @@ func TestHandleEnvKey(t *testing.T) {
 
 		handler.ServeHTTP(respond, request)
 
-		if respond.Code != http.StatusOK {
-			t.Errorf("expected status %v, but got %v", http.StatusOK, respond.Code)
+		if respond.Code != http.StatusNotFound {
+			t.Errorf("expected status %v, but got %v", http.StatusNotFound, respond.Code)
 		}
 	})
 
 	t.Run("Get existing key", func(t *testing.T) {
 		key := "SOME_VARIABLE"
-		value := "some value"
+		value := "value"
+
 		os.Setenv(key, value)
 		defer os.Unsetenv(key)
 
@@ -56,9 +58,11 @@ func TestHandleEnvKey(t *testing.T) {
 			t.Errorf("expected status %v, but got %v", http.StatusOK, response.Code)
 		}
 
-		want := key + "=" + value
-		if response.Body.String() != want {
-			t.Errorf("expected body %v, but got %v", want, response.Body.String())
+		want := value
+		var got string
+		json.NewDecoder(response.Body).Decode(&got)
+		if got != want {
+			t.Errorf("expected body %v, but got %v", want, got)
 		}
 	})
 
@@ -75,13 +79,17 @@ func TestHandleEnvKey(t *testing.T) {
 
 		handler.ServeHTTP(respond, request)
 
-		if respond.Code != http.StatusOK {
-			t.Errorf("expected status %v, but got %v", http.StatusOK, respond.Code)
+		if respond.Code != http.StatusNotFound {
+			t.Errorf("expected status %v, but got %v", http.StatusNotFound, respond.Code)
 		}
 
-		want := "Environment variable '" + key + "' not found"
-		if respond.Body.String() != want {
-			t.Errorf("expected body %v, but got %v", want, respond.Body.String())
+		want := ""
+
+		var got string
+		json.NewDecoder(respond.Body).Decode(&got)
+
+		if got != want {
+			t.Errorf("expected body %v, but got %v", want, got)
 		}
 	})
 }
@@ -109,8 +117,8 @@ func TestNotFound(t *testing.T) {
 
 		handler.ServeHTTP(response, request)
 
-		if response.Code != http.StatusOK {
-			t.Errorf("expected status %v, but got %v", http.StatusOK, response.Code)
+		if response.Code != http.StatusNotFound {
+			t.Errorf("expected status %v, but got %v", http.StatusNotFound, response.Code)
 		}
 	})
 }
