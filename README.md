@@ -22,19 +22,13 @@ $ cd envserver-Asmaa
 - Build the project:
 
 ```sh
-go build -o "bin/server" cmd/main.go
+go build -o "bin/app" cmd/main.go
 ```
 
-- Change into the project directory:
+- Run the app.
 
 ```sh
-$ cd bin
-```
-
-- Run the server.
-
-```sh
-./server -p [port]
+./bin/app -p [port]
 ```
 
 ## How to use
