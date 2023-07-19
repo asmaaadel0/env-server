@@ -6,7 +6,8 @@ import (
 	"net/http"
 )
 
-var ErrorOutOfRange = errors.New("port number out of range")
+// ErrorOutOfRange if user enter invalid port
+var ErrorOutOfRange = errors.New("port number out of range, range should be between [1, 65535]")
 
 type App struct {
 	port int
