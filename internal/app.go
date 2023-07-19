@@ -19,12 +19,13 @@ func NewApp(port int) (*App, error) {
 	return &App{port: port}, nil
 }
 
-func (app *App) Run() {
+func (app *App) Run() error {
 
 	http.HandleFunc("/env", handleRequests)
 	http.HandleFunc("/env/", handleRequests)
 
 	portListner := fmt.Sprintf(":%d", app.port)
 	fmt.Println("Server started on port", portListner)
-	http.ListenAndServe(portListner, nil)
+	err := http.ListenAndServe(portListner, nil)
+	return err
 }
