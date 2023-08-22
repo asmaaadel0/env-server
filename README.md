@@ -48,8 +48,7 @@ go build -o "bin/app" cmd/main.go
 ## How to use Docker
 
 - To start server using docker
--
-
+  
 ```sh
 docker-compose up -d
 ```
